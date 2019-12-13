@@ -58,8 +58,10 @@
       thisProduct.id = id;
       thisProduct.data = data;
       thisProduct.renderInMenu();
-
+      thisProduct.getElements();
       thisProduct.initAccordion();
+      thisProduct.initOrderForm();
+      thisProduct.processOrder();
       console.log('new Product:', thisProduct);
     }
     renderInMenu() {
@@ -104,24 +106,58 @@
       /* prevent default action for event */
         event.preventDefault();
         /* toggle active class on element of thisProduct */
-        thisProduct.element.classList.add('active');
+        
       
         /* find all active products */
         const activeProducts = document.querySelectorAll('article.product.active');
         /* START LOOP: for each active product */ 
 
         for(let active of activeProducts) {
-        /* START: if the active product isn't the element of thisProduct */   
-          if(active !== thisProduct.element) {
+        
           /* remove class active for the active product */
             active.classList.remove('active');
-          /* END: if the active product isn't the element of thisProduct */
-          } 
+          
         /* END LOOP: for each active product */
         }
+        thisProduct.element.classList.add('active');
       /* END: click event listener to trigger */
       });    
     }
+
+    initOrderForm(){
+      const thisProduct = this;
+      console.log(thisProduct);
+    }
+
+    processOrder() {
+      const thisProduct = this;
+      console.log(thisProduct);
+
+      thisProduct.form.addEventListener('submit', function(event){
+        event.preventDefault();
+        thisProduct.processOrder();
+      });
+
+      for(let input of thisProduct.formInputs){
+        input.addEventListener('change', function(){
+          thisProduct.processOrder();
+        });
+      }
+
+      thisProduct.cartButton.addEventListener('click', function(event){
+        event.preventDefault();
+        thisProduct.processOrder();
+      });
+    }
+
+    processOrder() {
+      const thisProduct = this;
+      console.log(thisProduct); 
+      
+      const formData = utils.serializeFormToObject(thisProduct.form);
+      console.log('formData', formData);
+
+    }	    
   }
 
   const app = {
