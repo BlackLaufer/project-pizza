@@ -82,7 +82,7 @@
 
     getElements() {
       const thisProduct = this;
-      console.log(thisProduct);
+      console.log('getElements',thisProduct);
 
       thisProduct.accordionTrigger = thisProduct.element.querySelector(select.menuProduct.clickable);
       thisProduct.form = thisProduct.element.querySelector(select.menuProduct.form);
@@ -94,10 +94,7 @@
     initAccordion() {
       const thisProduct = this;
       console.log(thisProduct);
-      /* find the clickable trigger (the element that should react to clicking) */
-
-      const productHeader = document.querySelectorAll('.product__header');
-      console.log(productHeader);
+      
       /* START: click event listener to trigger */
       
       const buttonClicked = thisProduct.element.querySelector(select.menuProduct.clickable);
@@ -124,27 +121,23 @@
       });    
     }
 
-    initOrderForm(){
+    initOrderForm() {
       const thisProduct = this;
-      console.log(thisProduct);
-    }
+      console.log('initOrderForm', thisProduct);
+    
 
-    processOrder() {
-      const thisProduct = this;
-      console.log(thisProduct);
-
-      thisProduct.form.addEventListener('submit', function(event){
+      thisProduct.form.addEventListener('submit', function(event) {
         event.preventDefault();
         thisProduct.processOrder();
       });
 
-      for(let input of thisProduct.formInputs){
-        input.addEventListener('change', function(){
+      for(let input of thisProduct.formInputs) {
+        input.addEventListener('change', function() {
           thisProduct.processOrder();
         });
       }
 
-      thisProduct.cartButton.addEventListener('click', function(event){
+      thisProduct.cartButton.addEventListener('click', function(event) {
         event.preventDefault();
         thisProduct.processOrder();
       });
@@ -152,12 +145,53 @@
 
     processOrder() {
       const thisProduct = this;
-      console.log(thisProduct); 
-      
+      console.log('processOrder',thisProduct);
+ 
       const formData = utils.serializeFormToObject(thisProduct.form);
       console.log('formData', formData);
 
-    }	    
+      /* set variable price to equal thisProduct */
+      let price = thisProduct.data.price;
+      console.log('Price:', price);
+      /* start loop for parmId */
+      /* save the element in thisProduct */
+      for(let param in thisProduct.data.params) {
+      console.log('Params', param, thisProduct.data.params[param]);
+        let params = thisProduct.data.params[param];
+        console.log(params);
+    
+        /* start loop optionId*/
+        /* save element in param.options */
+        for(let option in param.options) {
+        console.log('Options:', option);
+          let options = params.options[option];
+          console.log('options', options);
+          /* START IF: if option is selected and option is not default */
+          const optionSelected = formData.hasOwnProperty(param) && formData[param].indexOf(option) > -1;
+          console.log('optionSelected:', options.default);
+          
+          if(optionSelected && !options.default) {
+
+          /* add price  for variable price */
+            price = price + options.price;
+          /* END IF: if option is selected and option is not default */
+          }   
+          /* start else if */
+          /* deduct price of option from price */
+          else if(!optionSelected && options.default) {
+          //}
+          /* end else if */
+            price = price - options.price;
+          /* end loop start loop optionId */
+          let images = thisProduct.data.images;
+          console.log('images:', images)
+          }
+      /* end loop */
+        }
+      
+        thisProduct.priceElem.innerHTML = price;  
+      }
+    	    
   }
 
   const app = {
