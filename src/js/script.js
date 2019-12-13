@@ -1,4 +1,3 @@
-/* global Handlebars, utils, dataSource */ // eslint-disable-line no-unused-vars
 
 {
   'use strict';
@@ -62,7 +61,7 @@ class Product {
     thisProduct.initAccordion();
       console.log('new Product:', thisProduct);
     }
-  renderInMenu(){
+  renderInMenu() {
     const thisProduct = this;
 
     /* generate HTML based on template*/
@@ -77,13 +76,14 @@ class Product {
 
     menuContainer.appendChild(thisProduct.element);
   }
-      
+  
   initAccordion() {
     const thisProduct = this;
     console.log(thisProduct);
 /* find the clickable trigger (the element that should react to clicking) */
 
     const productHeader = document.querySelectorAll('.product__header');
+    console.log(productHeader);
 /* START: click event listener to trigger */
     
     const buttonClicked = thisProduct.element.querySelector(select.menuProduct.clickable);
@@ -92,7 +92,7 @@ class Product {
 /* prevent default action for event */
     event.preventDefault();
 /* toggle active class on element of thisProduct */
-    thisProduct.element.classList.add('active')
+    thisProduct.element.classList.add('active');
     
 /* find all active products */
     const activeProducts = document.querySelectorAll('article.product.active');
@@ -100,9 +100,9 @@ class Product {
 
     for(let active of activeProducts) {
 /* START: if the active product isn't the element of thisProduct */   
-      if(active !== thisProduct.element){
+      if(active !== thisProduct.element) {
 /* remove class active for the active product */
-        active.classList.remove('active')
+        active.classList.remove('active');
 /* END: if the active product isn't the element of thisProduct */
       } 
 /* END LOOP: for each active product */
