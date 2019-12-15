@@ -94,7 +94,6 @@
     initAccordion() {
       const thisProduct = this;
       console.log(thisProduct);
-      
       /* START: click event listener to trigger */
       
       const buttonClicked = thisProduct.element.querySelector(select.menuProduct.clickable);
@@ -178,23 +177,21 @@
           //}
           /* end else if */
             price = price - options.price;
-          /* end loop start loop optionId */
-          let images = thisProduct.data.images;
-          console.log('images:', images)
           }
+          /* end loop start loop optionId */
+        }
       /* end loop */
         }
       
         thisProduct.priceElem.innerHTML = price;  
       }
-    }	    
+    }	   
   
 
   const app = {
     initMenu: function() {
       const thisApp = this;
-      console.log('thisApp.data:', thisApp.data);
-      
+          
       for(let productData in thisApp.data.products) {
         new Product(productData, thisApp.data.products[productData]);
       }
