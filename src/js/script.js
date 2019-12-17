@@ -62,7 +62,6 @@
       thisProduct.initAccordion();
       thisProduct.initOrderForm();
       thisProduct.processOrder();
-      thisProduct.initAmountWidget();
     }
     renderInMenu() {
       const thisProduct = this;
@@ -121,8 +120,6 @@
       });
     }
 
-   
-
     processOrder() {
       const thisProduct = this;
       const formData = utils.serializeFormToObject(thisProduct.form);
@@ -152,69 +149,7 @@
         let thisProductPrice = thisProduct.element.querySelector(select.menuProduct.priceElem);
         thisProductPrice.innerHTML = price;     
       }
-    }
-
-      initAmountWidget() {
-        const thisProduct = this;
-  
-        thisProduct.amountWidget = new AmountWidget(thisProduct.amountWidgetElem);
-        thisProduct.amountWidgetElem.addEventListener('updated', function(event) {
-          thisProduct.processOrder();
-        });
-    }
-  }
-  class AmountWidget{
-    constructor(element){
-      const thisWidget = this;
-
-      thisWidget.getElements(element);
-      thisWidget.setValue(thisWidget.input.value);
-      thisWidget.value = settings.amountWidget.defaultValue;
-      thisWidget.initActions();
-    }
-
-    getElements(element){
-      const thisWidget = this;
-
-      thisWidget.element = element;
-      thisWidget.input = thisWidget.element.querySelector(select.widgets.amount.input);
-      thisWidget.linkDecrease = thisWidget.element.querySelector(select.widgets.amount.linkDecrease);
-      thisWidget.linkIncrease = thisWidget.element.querySelector(select.widgets.amount.linkIncrease);
-    }
-
-    setValue(value) {
-      const thisWidget = this;
-      const newValue = parseInt(value);
-
-      if (settings.amountWidget.defaultMin <= newValue && newValue <= settings.amountWidget.defaultMax && newValue != thisWidget.value) {
-        thisWidget.value = newValue;
-        thisWidget.announce();
-      }
-      thisWidget.input.value = thisWidget.value;
-    }
-
-    initActions(){
-      const thisWidget = this;
-
-      thisWidget.input.addEventListener('change', function(event){
-        thisWidget.setValue(thisWidget.input.value);
-      });
-      thisWidget.linkDecrease.addEventListener('click', function(event){
-        event.preventDefault();
-        thisWidget.setValue(thisWidget.value -1);
-      });
-      thisWidget.linkIncrease.addEventListener('click', function(event){
-        event.preventDefault();
-        thisWidget.setValue(thisWidget.value +1);
-      });
-    }
-      announce(){
-        const thisWidget = this;
-
-        const event = new Event('updated');
-        thisWidget.element.dispatchEvent(event);
-      }
-
+    } 
   }
 
   const app = {
@@ -233,7 +168,11 @@
 
     init: function() {
       const thisApp = this;
-      console.log('settings:', settings);
+      console.log('*** App starting ***');	
+      console.log('thisApp:', thisApp);	
+      console.log('classNames:', classNames);	
+      console.log('settings:', settings);	
+      console.log('templates:', templates);
     
       thisApp.initData();
       thisApp.initMenu();
