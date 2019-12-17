@@ -148,12 +148,11 @@
           }
         }
         let thisProductPrice = thisProduct.element.querySelector(select.menuProduct.priceElem);
-        thisProductPrice.innerHTML = price;
-        
+        thisProductPrice.innerHTML = price;     
       }
     }
   }
-    
+
   const app = {
     initMenu: function() {
       const thisApp = this;
