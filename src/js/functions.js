@@ -35,10 +35,13 @@ utils.serializeFormToObject = function(form){
   }
   return output;
 };
+Handlebars.registerHelper('ifEquals', function(arg1, arg2, options) {
+  return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+});
 
-utils.convertDataSourceToDbJson = function(){
+utils.convertDataSourceToDbJson = function() {
   const productJson = [];
-  for(let key in dataSource.products){
+  for(let key in dataSource.products) {
     productJson.push(Object.assign({id: key}, dataSource.products[key]));
   }
 
