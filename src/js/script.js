@@ -74,11 +74,6 @@
     cart: {
       defaultDeliveryFee: 20,
     },
-    db: {
-      url: '//localhost:3131',
-      product: 'product',
-      order: 'order',
-    },
   };
   
   const templates = {
@@ -425,7 +420,7 @@
         thisCartProduct.dom.price.innerHTML = thisCartProduct.price;
       });
     }
-
+    
     initActions() {
       const thisCartProduct = this;
 
@@ -459,25 +454,14 @@
 
     initData: function() {
       const thisApp = this;
-      thisApp.data = {};
-      const url = settings.db.url + '/' + settings.db.product;
-
-      fetch(url)
-        .then(function(rawResponse){
-          return rawResponse.json();
-        })
-        .then(function(parsedResponse){
-          thisApp.data.products = parsedResponse;
-          app.initMenu();
-        });
-      console.log('thisApp.data', JSON.stringify(thisApp.data));
+      thisApp.data = dataSource;
     },
 
     initMenu: function() {
       const thisApp = this;
           
       for(let productData in thisApp.data.products) {
-        new Product(thisApp.data.products[productData].id, thisApp.data.products[productData]);
+        new Product(productData, thisApp.data.products[productData]);
       }
     },
 
@@ -485,6 +469,7 @@
       const thisApp = this;
       
       thisApp.initData();
+      thisApp.initMenu();
       thisApp.initCart();
     },
   };
