@@ -371,6 +371,7 @@
       thisCart.dom.productList.appendChild(generatedDOM);
       thisCart.products.push(new CartProduct(menuProduct, generatedDOM));
       thisCart.update();
+      
     }
     remove(cartProduct) {
       const thisCart = this;
