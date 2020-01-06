@@ -74,6 +74,11 @@
     cart: {
       defaultDeliveryFee: 20,
     },
+    db: {
+      url: '//localhost:3131',
+      product: 'product',
+      order: 'order',
+    },
   };
   
   const templates = {
@@ -214,8 +219,8 @@
       const thisWidget = this;
 
       thisWidget.getElements(element);
-      thisWidget.setValue(thisWidget.input.value);
       thisWidget.value = settings.amountWidget.defaultValue;
+      thisWidget.setValue(thisWidget.input.value);
       thisWidget.initActions();
     }
 
@@ -243,6 +248,7 @@
       const thisWidget = this;
 
       thisWidget.input.addEventListener('change', function() {
+       
         thisWidget.setValue(thisWidget.input.value);
       });
       thisWidget.linkDecrease.addEventListener('click', function(event) {
@@ -260,7 +266,7 @@
         const event = new CustomEvent('updated', {
           bubbles: true
         });
-        
+        thisWidget.element.dispatchEvent(event);
       }
   }
 
@@ -275,12 +281,13 @@
     update() {
       const thisCart = this;
 
-      thisCart.totalNumber = 0;
       thisCart.subtotalPrice = 0;
 
       for (let product of thisCart.products) {
-        thisCart.subtotalPrice += product.priceSingle;
+        thisCart.totalNumber = 0;
         thisCart.totalNumber += product.amount;
+        thisCart.subtotalPrice += product.priceSingle * thisCart.totalNumber;
+        
       }
       thisCart.totalPrice = thisCart.subtotalPrice + thisCart.deliveryFee;
       console.log(thisCart.totalPrice);
@@ -312,19 +319,20 @@
       thisCart.dom.toggleTrigger.addEventListener('click', function() {
         thisCart.dom.wrapper.classList.toggle(classNames.cart.wrapperActive);
       });
-      thisCart.dom.productList.addEventListener('updated', function(){
+      thisCart.dom.productList.addEventListener('updated', function() {
         thisCart.update();
         console.log('update');
       });
-      thisCart.dom.productList.addEventListener('remove', function(){
+      thisCart.dom.productList.addEventListener('remove', function() {
         thisCart.remove(event.detail.cartProduct);
         console.log('remove');
       });
-      thisCart.dom.form.addEventListener('submit', function(){
+      thisCart.dom.form.addEventListener('submit', function() {
         event.preventDefault();
         thisCart.sendOrder();
       });
     }
+    
     sendOrder() {
       const thisCart = this;
       const url = settings.db.url + '/' + settings.db.order;
@@ -340,7 +348,7 @@
       };
 
       for (let product of thisCart.products) {
-        products.push.getData(product);
+        payload.products.push(thisCart.getData(product));
       }
 
       const options = {
@@ -352,16 +360,21 @@
       };
 
       fetch(url, options)
-        .then(function(response){
+        .then(function(response) {
           return response.json();
-        }).then(function(parsedResponse){
-          console.log('parsedResponse', parsedResponse);
         });
 
     }
 
     getData(product) {
-      console.log(product);
+      const thisCartProduct = product;
+      return {
+        id: thisCartProduct.id,
+        amount: thisCartProduct.amount,
+        params: thisCartProduct.params,
+        priceSingle: thisCartProduct.priceSingle,
+        name: thisCartProduct.name,
+      };
     }
 
     add(menuProduct) {
@@ -455,14 +468,24 @@
 
     initData: function() {
       const thisApp = this;
-      thisApp.data = dataSource;
+      thisApp.data = {};
+      const url = settings.db.url + '/' + settings.db.product;
+      
+      fetch(url)
+        .then(function(rawResponse) {
+          return rawResponse.json();
+        })
+        .then(function(parsedResponse){
+          thisApp.data.products = parsedResponse;
+          app.initMenu();
+        });   
     },
 
     initMenu: function() {
       const thisApp = this;
           
       for(let productData in thisApp.data.products) {
-        new Product(productData, thisApp.data.products[productData]);
+        new Product(thisApp.data.products[productData].id, thisApp.data.products[productData]);
       }
     },
 
@@ -470,7 +493,6 @@
       const thisApp = this;
       
       thisApp.initData();
-      thisApp.initMenu();
       thisApp.initCart();
     },
   };
