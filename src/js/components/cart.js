@@ -73,8 +73,8 @@ class Cart{
       .then(function(rawResponse) {
         return rawResponse.json();
       })
-      .then(function(parsedResponse) {
-        console.log('parsedResopnse',parsedResponse);
+      catch(function (error) {
+        console.error(error);
       });
 
   }
