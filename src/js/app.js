@@ -4,35 +4,6 @@ import Cart from './components/cart.js';
 
 const app = {
 
-  initPages: function() {
-    const thisApp = this;
-
-    thisApp.pages = document.querySelector(select.conteinerOf.pages).children;
-    thisApp.navLinks = document.querySelectorAll(select.nav.links).children;
-
-    thisApp.activatePage(thisApp.pages[0].id);  
-    
-    for(let)
-  },
-
-  activatePage: function(pageId) {
-    const thisApp = this;
-
-    /* add class "active" to matching pages, remove from non- matching*/
-    for(let page of thisApp.pages) {
-       page.classList.toggle(classNames.pages.active, page.id == pageId);
-      }
-    
-    /* add class "active" to matching links, remove from non- matching*/
-
-    for(let link of thisApp.navLinks) {
-      link.classList.toggle(
-        classNames.avLinks.active, 
-        link.getAttribute('href') == '#' + pageId
-      );
-     }
-  },
-
   initCart: function() {
     const thisApp = this;
     const cartElem = document.querySelector(select.containerOf.cart);
