@@ -3,7 +3,6 @@ import Product from './components/product.js';
 import Cart from './components/cart.js';
 
 const app = {
-
   initCart: function() {
     const thisApp = this;
     const cartElem = document.querySelector(select.containerOf.cart);
